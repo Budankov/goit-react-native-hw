@@ -6,6 +6,7 @@ import {
   ImageBackground,
   TextInput,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -21,29 +22,38 @@ const RegistrationScreen = () => {
         style={styles.bcgImage}
         source={require("../../assets/images/auth/auth-bcg-image.jpg")}
       >
-        <View style={styles.form}>
-          <Image
-            style={styles.avatar}
-            source={require("../../assets/images/auth/avatar.jpg")}
-          ></Image>
-          <Text style={styles.title}>Реєстрація</Text>
-          <TextInput style={styles.input} placeholder="Логін" />
-          <TextInput
-            style={styles.input}
-            placeholder="Адреса електронної пошти"
-          />
-          <TextInput
-            style={styles.input}
-            secureTextEntry={hidePass}
-            placeholder="Пароль"
-          >
-            <Icon
-              style={styles.inputShowPasword}
-              name={hidePass ? "eye-slash" : "eye"}
-              onPress={() => setHidePass(!hidePass)}
+        <KeyboardAvoidingView>
+          <View style={styles.form}>
+            <Image
+              style={styles.avatar}
+              source={require("../../assets/images/auth/avatar.jpg")}
+            ></Image>
+            <Text style={styles.title}>Реєстрація</Text>
+            <TextInput style={styles.input} placeholder="Логін" />
+            <TextInput
+              style={styles.input}
+              placeholder="Адреса електронної пошти"
             />
-          </TextInput>
-        </View>
+            <TextInput
+              style={styles.input}
+              //   secureTextEntry={hidePass}
+              //   textContentType="password"
+              //   autoCorrect={false}
+              placeholder="Пароль"
+              //   textAlign={"left"}
+            >
+              <Icon
+                style={styles.inputShowPasword}
+                name={hidePass ? "eye-slash" : "eye"}
+                onPress={() => setHidePass(!hidePass)}
+              />
+            </TextInput>
+            <TouchableOpacity style={styles.submitBtn} activeOpacity={0.8}>
+              <Text style={styles.submitBtnText}>Зареєструватись</Text>
+            </TouchableOpacity>
+            <Text style={styles.singInText}>Вже є обліковий запис? Увійти</Text>
+          </View>
+        </KeyboardAvoidingView>
       </ImageBackground>
     </View>
   );
@@ -92,12 +102,32 @@ const styles = StyleSheet.create({
     placeholderTextColor: "#BDBDBD",
     padding: 16,
     fontSize: 16,
-    lineHeight: 19,
     marginBottom: 16,
+    position: "relative",
   },
   inputShowPasword: {
+    position: "absolute",
     fontSize: 16,
-    right: 5,
+    right: 20,
+  },
+  submitBtn: {
+    backgroundColor: "#FF6C00",
+    marginHorizontal: 16,
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  submitBtnText: {
+    color: "#FFF",
+    fontSize: 16,
+    paddingTop: 16,
+    paddingBottom: 16,
+  },
+  singInText: {
+    color: "#1B4371",
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginTop: 16,
   },
 });
 
