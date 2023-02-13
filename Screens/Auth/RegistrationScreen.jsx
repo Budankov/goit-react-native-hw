@@ -29,25 +29,31 @@ const RegistrationScreen = () => {
               source={require("../../assets/images/auth/avatar.jpg")}
             ></Image>
             <Text style={styles.title}>Реєстрація</Text>
-            <TextInput style={styles.input} placeholder="Логін" />
             <TextInput
               style={styles.input}
+              keyboardType={"default"}
+              placeholder="Логін"
+            />
+            <TextInput
+              style={styles.input}
+              keyboardType={"email-address"}
               placeholder="Адреса електронної пошти"
             />
             <TextInput
               style={styles.input}
-              //   secureTextEntry={hidePass}
-              //   textContentType="password"
-              //   autoCorrect={false}
+              keyboardType={"default"}
+              secureTextEntry={hidePass}
+              textContentType="password"
+              autoCorrect={false}
               placeholder="Пароль"
-              //   textAlign={"left"}
             >
-              <Icon
-                style={styles.inputShowPasword}
-                name={hidePass ? "eye-slash" : "eye"}
-                onPress={() => setHidePass(!hidePass)}
-              />
+              {" "}
             </TextInput>
+            <Icon
+              style={styles.inputShowPasword}
+              name={hidePass ? "eye-slash" : "eye"}
+              onPress={() => setHidePass(!hidePass)}
+            />
             <TouchableOpacity style={styles.submitBtn} activeOpacity={0.8}>
               <Text style={styles.submitBtnText}>Зареєструватись</Text>
             </TouchableOpacity>
@@ -67,7 +73,7 @@ const styles = StyleSheet.create({
   bcgImage: {
     flex: 1,
     resizeMode: "cover",
-    justifyContent: "flex-end",
+    justifyContent: "center",
   },
 
   form: {
