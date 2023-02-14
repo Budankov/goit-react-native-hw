@@ -1,3 +1,5 @@
+import Icon from "react-native-vector-icons/FontAwesome5";
+
 import {
   StyleSheet,
   Text,
@@ -12,13 +14,18 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 
-import Icon from "react-native-vector-icons/FontAwesome5";
-
 import { useState } from "react";
+
+const initialState = {
+  login: "",
+  email: "",
+  password: "",
+};
 
 const RegistrationScreen = () => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [hidePass, setHidePass] = useState(true);
+  const [state, setState] = useState(initialState);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
@@ -46,16 +53,22 @@ const RegistrationScreen = () => {
                   style={styles.avatar}
                   source={require("../../assets/images/auth/avatar.jpg")}
                 ></Image>
-                <Text style={styles.title}>Реєстрація</Text>
+                <Text style={styles.title}>Реєстраціяяяя</Text>
                 <TextInput
                   style={styles.input}
                   onFocus={() => setIsShowKeyboard(true)}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, login: value }))
+                  }
                   keyboardType={"default"}
                   placeholder="Логін"
                 />
                 <TextInput
                   style={styles.input}
                   onFocus={() => setIsShowKeyboard(true)}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, email: value }))
+                  }
                   keyboardType={"email-address"}
                   placeholder="Адреса електронної пошти"
                 />
@@ -63,6 +76,12 @@ const RegistrationScreen = () => {
                   <TextInput
                     style={styles.input}
                     onFocus={() => setIsShowKeyboard(true)}
+                    onChangeText={(value) =>
+                      setState((prevState) => ({
+                        ...prevState,
+                        password: value,
+                      }))
+                    }
                     keyboardType={"default"}
                     secureTextEntry={hidePass}
                     textContentType="password"
