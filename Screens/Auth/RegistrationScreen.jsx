@@ -46,14 +46,14 @@ const RegistrationScreen = () => {
               <View
                 style={{
                   ...styles.form,
-                  marginBottom: isShowKeyboard ? -100 : 85,
+                  marginBottom: isShowKeyboard ? -95 : 85,
                 }}
               >
                 <Image
                   style={styles.avatar}
                   source={require("../../assets/images/auth/avatar.jpg")}
                 ></Image>
-                <Text style={styles.title}>Реєстраціяяяя</Text>
+                <Text style={styles.title}>Реєстрація</Text>
                 <TextInput
                   style={styles.input}
                   onFocus={() => setIsShowKeyboard(true)}
