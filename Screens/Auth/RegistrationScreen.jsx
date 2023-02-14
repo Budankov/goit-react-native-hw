@@ -5,8 +5,11 @@ import {
   Image,
   ImageBackground,
   TextInput,
+  Platform,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -14,54 +17,81 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { useState } from "react";
 
 const RegistrationScreen = () => {
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [hidePass, setHidePass] = useState(true);
 
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  };
+
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        style={styles.bcgImage}
-        source={require("../../assets/images/auth/auth-bcg-image.jpg")}
-      >
-        <KeyboardAvoidingView>
-          <View style={styles.form}>
-            <Image
-              style={styles.avatar}
-              source={require("../../assets/images/auth/avatar.jpg")}
-            ></Image>
-            <Text style={styles.title}>Реєстрація</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType={"default"}
-              placeholder="Логін"
-            />
-            <TextInput
-              style={styles.input}
-              keyboardType={"email-address"}
-              placeholder="Адреса електронної пошти"
-            />
-            <TextInput
-              style={styles.input}
-              keyboardType={"default"}
-              secureTextEntry={hidePass}
-              textContentType="password"
-              autoCorrect={false}
-              placeholder="Пароль"
-            >
-              {" "}
-            </TextInput>
-            <Icon
-              style={styles.inputShowPasword}
-              name={hidePass ? "eye-slash" : "eye"}
-              onPress={() => setHidePass(!hidePass)}
-            />
-            <TouchableOpacity style={styles.submitBtn} activeOpacity={0.8}>
-              <Text style={styles.submitBtnText}>Зареєструватись</Text>
-            </TouchableOpacity>
-            <Text style={styles.singInText}>Вже є обліковий запис? Увійти</Text>
-          </View>
-        </KeyboardAvoidingView>
-      </ImageBackground>
-    </View>
+    <TouchableWithoutFeedback onPress={keyboardHide}>
+      <View style={styles.container}>
+        <ImageBackground
+          style={styles.bcgImage}
+          source={require("../../assets/images/auth/auth-bcg-image.jpg")}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+          >
+            <View style={styles.formWrapper}>
+              <View
+                style={{
+                  ...styles.form,
+                  marginBottom: isShowKeyboard ? -100 : 85,
+                }}
+              >
+                <Image
+                  style={styles.avatar}
+                  source={require("../../assets/images/auth/avatar.jpg")}
+                ></Image>
+                <Text style={styles.title}>Реєстрація</Text>
+                <TextInput
+                  style={styles.input}
+                  onFocus={() => setIsShowKeyboard(true)}
+                  keyboardType={"default"}
+                  placeholder="Логін"
+                />
+                <TextInput
+                  style={styles.input}
+                  onFocus={() => setIsShowKeyboard(true)}
+                  keyboardType={"email-address"}
+                  placeholder="Адреса електронної пошти"
+                />
+                <View>
+                  <TextInput
+                    style={styles.input}
+                    onFocus={() => setIsShowKeyboard(true)}
+                    keyboardType={"default"}
+                    secureTextEntry={hidePass}
+                    textContentType="password"
+                    autoCorrect={false}
+                    maxLength={20}
+                    placeholder="Пароль"
+                  ></TextInput>
+                  <Icon
+                    style={styles.inputShowPasword}
+                    name={hidePass ? "eye-slash" : "eye"}
+                    onPress={() => setHidePass(!hidePass)}
+                  />
+                </View>
+                <TouchableOpacity
+                  style={styles.submitBtn}
+                  activeOpacity={0.8}
+                  onPress={keyboardHide}
+                >
+                  <Text style={styles.submitBtnText}>Зареєструватись</Text>
+                </TouchableOpacity>
+                <Text style={styles.singInText}>
+                  Вже є обліковий запис? Увійти
+                </Text>
+              </View>
+            </View>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -73,14 +103,16 @@ const styles = StyleSheet.create({
   bcgImage: {
     flex: 1,
     resizeMode: "cover",
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    // justifyContent: "center",
   },
-
-  form: {
+  formWrapper: {
     backgroundColor: "#FFF",
-    height: 549,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
+  },
+  form: {
+    // paddingTop: 80,
   },
   avatar: {
     position: "absolute",
@@ -114,7 +146,8 @@ const styles = StyleSheet.create({
   inputShowPasword: {
     position: "absolute",
     fontSize: 16,
-    right: 20,
+    right: 26,
+    top: 16,
   },
   submitBtn: {
     backgroundColor: "#FF6C00",
@@ -122,6 +155,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 33,
   },
   submitBtnText: {
     color: "#FFF",
