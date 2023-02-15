@@ -1,4 +1,6 @@
+import AppLoading from "expo-app-loading";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import * as Font from "expo-font";
 
 import {
   StyleSheet,
@@ -22,15 +24,35 @@ const initialState = {
   password: "",
 };
 
+const loadFont = async () => {
+  await Font.loadAsync({
+    "Roboto-Regular": require("../../assets/fonts/Roboto-Regular.ttf"),
+  });
+};
+
 const RegistrationScreen = () => {
+  const [state, setState] = useState(initialState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [hidePass, setHidePass] = useState(true);
-  const [state, setState] = useState(initialState);
+  const [asReady, setAsReady] = useState(false);
+
+  console.log(state);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+    setState(initialState);
   };
+
+  if (!asReady) {
+    return (
+      <AppLoading
+        startAsync={loadFont}
+        onFinish={() => setAsReady(true)}
+        onError={console.warn}
+      />
+    );
+  }
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
@@ -60,6 +82,8 @@ const RegistrationScreen = () => {
                   onChangeText={(value) =>
                     setState((prevState) => ({ ...prevState, login: value }))
                   }
+                  onSubmitEditing={keyboardHide}
+                  value={state.login}
                   keyboardType={"default"}
                   placeholder="Логін"
                 />
@@ -69,6 +93,8 @@ const RegistrationScreen = () => {
                   onChangeText={(value) =>
                     setState((prevState) => ({ ...prevState, email: value }))
                   }
+                  onSubmitEditing={keyboardHide}
+                  value={state.email}
                   keyboardType={"email-address"}
                   placeholder="Адреса електронної пошти"
                 />
@@ -82,6 +108,8 @@ const RegistrationScreen = () => {
                         password: value,
                       }))
                     }
+                    onSubmitEditing={keyboardHide}
+                    value={state.password}
                     keyboardType={"default"}
                     secureTextEntry={hidePass}
                     textContentType="password"
@@ -142,6 +170,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   title: {
+    fontFamily: "Roboto-Regular",
     fontSize: 30,
     textAlign: "center",
     marginBottom: 33,
