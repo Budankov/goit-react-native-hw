@@ -1,6 +1,4 @@
-import AppLoading from "expo-app-loading";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import * as Font from "expo-font";
 
 import {
   StyleSheet,
@@ -14,9 +12,10 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
+  Dimensions,
 } from "react-native";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const initialState = {
   login: "",
@@ -24,35 +23,30 @@ const initialState = {
   password: "",
 };
 
-const loadFont = async () => {
-  await Font.loadAsync({
-    "Roboto-Regular": require("../../assets/fonts/Roboto-Regular.ttf"),
-  });
-};
-
 const RegistrationScreen = () => {
   const [state, setState] = useState(initialState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [hidePass, setHidePass] = useState(true);
-  const [asReady, setAsReady] = useState(false);
+  const [dimensions, setDimensions] = useState(
+    Dimensions.get("window").width - 20 * 2
+  );
 
-  console.log(state);
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width;
+      console.log(width);
+    };
+    const dimensionsHandler = Dimensions.addEventListener("change", onChange);
+    return () => {
+      dimensionsHandler.remove();
+    };
+  }, []);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
     setState(initialState);
   };
-
-  if (!asReady) {
-    return (
-      <AppLoading
-        startAsync={loadFont}
-        onFinish={() => setAsReady(true)}
-        onError={console.warn}
-      />
-    );
-  }
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
@@ -69,12 +63,15 @@ const RegistrationScreen = () => {
                 style={{
                   ...styles.form,
                   marginBottom: isShowKeyboard ? -95 : 85,
+                  width: dimensions,
                 }}
               >
-                <Image
-                  style={styles.avatar}
-                  source={require("../../assets/images/auth/avatar.jpg")}
-                ></Image>
+                <View style={styles.avatarWrapper}>
+                  <Image
+                    style={styles.avatar}
+                    source={require("../../assets/images/auth/avatar.jpg")}
+                  ></Image>
+                </View>
                 <Text style={styles.title}>Реєстрація</Text>
                 <TextInput
                   style={styles.input}
@@ -151,34 +148,35 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
-    // justifyContent: "center",
   },
   formWrapper: {
     backgroundColor: "#FFF",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
+    alignItems: "center",
   },
   form: {
-    // paddingTop: 80,
+    // marginHorizontal: 16,
+  },
+  avatarWrapper: {
+    alignItems: "center",
   },
   avatar: {
     position: "absolute",
+    top: -50,
     width: 120,
     height: 120,
-    top: -50,
-    marginHorizontal: 128,
     borderRadius: 16,
   },
   title: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: "Roboto",
+    fontWeight: "500",
     fontSize: 30,
     textAlign: "center",
     marginBottom: 33,
-    fontWeight: "bold",
     marginTop: 92,
   },
   input: {
-    marginHorizontal: 16,
     borderWidth: 1,
     color: "#212121",
     borderColor: "#E8E8E8",
@@ -187,6 +185,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
     placeholderTextColor: "#BDBDBD",
     padding: 16,
+    fontFamily: "Roboto",
+    fontWeight: "400",
     fontSize: 16,
     marginBottom: 16,
     position: "relative",
@@ -199,7 +199,6 @@ const styles = StyleSheet.create({
   },
   submitBtn: {
     backgroundColor: "#FF6C00",
-    marginHorizontal: 16,
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
@@ -207,6 +206,8 @@ const styles = StyleSheet.create({
   },
   submitBtnText: {
     color: "#FFF",
+    fontFamily: "Roboto",
+    fontWeight: "400",
     fontSize: 16,
     paddingTop: 16,
     paddingBottom: 16,
@@ -216,6 +217,9 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
     marginTop: 16,
+    fontFamily: "Roboto",
+    fontWeight: "400",
+    fontSize: 16,
   },
 });
 
