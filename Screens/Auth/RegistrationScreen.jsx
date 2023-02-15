@@ -31,6 +31,8 @@ const RegistrationScreen = () => {
     Dimensions.get("window").width - 20 * 2
   );
 
+  console.log(state);
+
   useEffect(() => {
     const onChange = () => {
       const width = Dimensions.get("window").width;

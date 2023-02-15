@@ -29,6 +29,7 @@ const LoginScreen = () => {
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 20 * 2
   );
+  console.log(state);
 
   useEffect(() => {
     const onChange = () => {
