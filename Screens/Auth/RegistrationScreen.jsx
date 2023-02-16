@@ -1,7 +1,6 @@
 import Icon from "react-native-vector-icons/FontAwesome5";
 
 import {
-  StyleSheet,
   Text,
   View,
   Image,
@@ -17,6 +16,9 @@ import {
 
 import { useState, useEffect } from "react";
 
+import { useFont } from "../../hooks/useFont";
+import styles from "./auth.styles";
+
 const initialState = {
   login: "",
   email: "",
@@ -30,8 +32,6 @@ const RegistrationScreen = () => {
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 20 * 2
   );
-
-  console.log(state);
 
   useEffect(() => {
     const onChange = () => {
@@ -52,7 +52,7 @@ const RegistrationScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.container}>
+      <View onLayout={useFont} style={styles.container}>
         <ImageBackground
           style={styles.bcgImage}
           source={require("../../assets/images/auth/auth-bcg-image.jpg")}
@@ -140,89 +140,5 @@ const RegistrationScreen = () => {
     </TouchableWithoutFeedback>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  bcgImage: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "flex-end",
-  },
-  formWrapper: {
-    backgroundColor: "#FFF",
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    alignItems: "center",
-  },
-  form: {
-    // marginHorizontal: 16,
-  },
-  avatarWrapper: {
-    alignItems: "center",
-  },
-  avatar: {
-    position: "absolute",
-    top: -50,
-    width: 120,
-    height: 120,
-    borderRadius: 16,
-  },
-  title: {
-    fontFamily: "Roboto",
-    fontWeight: "500",
-    fontSize: 30,
-    textAlign: "center",
-    marginBottom: 33,
-    marginTop: 92,
-  },
-  input: {
-    borderWidth: 1,
-    color: "#212121",
-    borderColor: "#E8E8E8",
-    borderRadius: 8,
-    height: 50,
-    backgroundColor: "#F6F6F6",
-    placeholderTextColor: "#BDBDBD",
-    padding: 16,
-    fontFamily: "Roboto",
-    fontWeight: "400",
-    fontSize: 16,
-    marginBottom: 16,
-    position: "relative",
-  },
-  inputShowPasword: {
-    position: "absolute",
-    fontSize: 16,
-    right: 26,
-    top: 16,
-  },
-  submitBtn: {
-    backgroundColor: "#FF6C00",
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 33,
-  },
-  submitBtnText: {
-    color: "#FFF",
-    fontFamily: "Roboto",
-    fontWeight: "400",
-    fontSize: 16,
-    paddingTop: 16,
-    paddingBottom: 16,
-  },
-  singInText: {
-    color: "#1B4371",
-    marginLeft: "auto",
-    marginRight: "auto",
-    marginTop: 16,
-    fontFamily: "Roboto",
-    fontWeight: "400",
-    fontSize: 16,
-  },
-});
 
 export default RegistrationScreen;
