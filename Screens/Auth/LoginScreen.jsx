@@ -15,7 +15,6 @@ import {
 
 import { useState, useEffect } from "react";
 
-import { useFont } from "../../hooks/useFont";
 import styles from "./auth.styles";
 
 const initialState = {
@@ -50,7 +49,7 @@ const LoginScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View onLayout={useFont} style={styles.container}>
+      <View style={styles.container}>
         <ImageBackground
           style={styles.bcgImage}
           source={require("../../assets/images/auth/auth-bcg-image.jpg")}

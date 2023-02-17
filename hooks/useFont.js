@@ -3,21 +3,21 @@ import * as SplashScreen from "expo-splash-screen";
 import { useCallback, useEffect, useState } from "react";
 
 export const useFont = () => {
-  const [isReady, setIsReady] = useState(false);
+  const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
     async function prepare() {
       try {
         await Font.loadAsync({
-          "Roboto-Regular": require("../../assets/fonts/Roboto-Regular.ttf"),
-          "Roboto-Medium": require("../../assets/fonts/Roboto-Medium.ttf"),
-          "Roboto-Bold": require("../../assets/fonts/Roboto-Bold.ttf"),
-          "Inter-Medium": require("../../assets/fonts/Inter-Medium.ttf"),
+          "Roboto-Regular": require("../fonts/Roboto-Regular.ttf"),
+          "Roboto-Medium": require("../fonts/Roboto-Medium.ttf"),
+          "Roboto-Bold": require("../fonts/Roboto-Bold.ttf"),
+          "Inter-Medium": require("../fonts/Inter-Medium.ttf"),
         });
       } catch (e) {
-        console.warn(e);
+        console.log(e);
       } finally {
-        setIsReady(true);
+        setAppIsReady(true);
       }
     }
 
@@ -25,10 +25,10 @@ export const useFont = () => {
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
-    if (isReady) {
+    if (appIsReady) {
       await SplashScreen.hideAsync();
     }
-  }, [isReady]);
+  }, [appIsReady]);
 
-  return { isReady, onLayoutRootView };
+  return { appIsReady, onLayoutRootView };
 };
