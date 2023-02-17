@@ -22,7 +22,7 @@ const initialState = {
   password: "",
 };
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [state, setState] = useState(initialState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [hidePass, setHidePass] = useState(true);
@@ -61,7 +61,7 @@ const LoginScreen = () => {
               <View
                 style={{
                   ...styles.form,
-                  marginBottom: isShowKeyboard ? -95 : 111,
+                  marginBottom: isShowKeyboard ? -95 : 151,
                   width: dimensions,
                 }}
               >
@@ -109,9 +109,13 @@ const LoginScreen = () => {
                 >
                   <Text style={styles.submitBtnText}>Увійти</Text>
                 </TouchableOpacity>
-                <Text style={styles.singInText}>
-                  Немає облікового запису? Зареєструватись
-                </Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Registration")}
+                >
+                  <Text style={styles.singInText}>
+                    Немає облікового запису? Зареєструватись
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </KeyboardAvoidingView>

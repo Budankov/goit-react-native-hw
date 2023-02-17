@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
   },
   avatarWrapper: {
     alignItems: "center",
+    marginBottom: 60,
   },
   avatar: {
     position: "absolute",
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: "center",
     marginBottom: 33,
-    marginTop: 92,
+    marginTop: 32,
   },
   input: {
     borderWidth: 1,
