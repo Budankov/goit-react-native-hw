@@ -1,5 +1,7 @@
 import Icon from "react-native-vector-icons/FontAwesome5";
 
+import { useState, useEffect } from "react";
+
 import {
   Text,
   View,
@@ -13,7 +15,9 @@ import {
   Dimensions,
 } from "react-native";
 
-import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+
+import { auhtSignInUser } from "../../redux/auth/authOperations";
 
 import styles from "./auth.styles";
 
@@ -30,6 +34,8 @@ const LoginScreen = ({ navigation }) => {
     Dimensions.get("window").width - 20 * 2
   );
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const onChange = () => {
       const width = Dimensions.get("window").width;
@@ -44,11 +50,17 @@ const LoginScreen = ({ navigation }) => {
   const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+    dispatch(auhtSignInUser(state));
     setState(initialState);
   };
 
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  };
+
   return (
-    <TouchableWithoutFeedback onPress={handleSubmit}>
+    <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.bcgImage}
@@ -72,7 +84,7 @@ const LoginScreen = ({ navigation }) => {
                   onChangeText={(value) =>
                     setState((prevState) => ({ ...prevState, email: value }))
                   }
-                  onSubmitEditing={handleSubmit}
+                  onSubmitEditing={keyboardHide}
                   value={state.email}
                   keyboardType={"email-address"}
                   placeholder="Адреса електронної пошти"
@@ -87,7 +99,7 @@ const LoginScreen = ({ navigation }) => {
                         password: value,
                       }))
                     }
-                    onSubmitEditing={handleSubmit}
+                    onSubmitEditing={keyboardHide}
                     value={state.password}
                     keyboardType={"default"}
                     secureTextEntry={hidePass}

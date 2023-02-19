@@ -56,8 +56,13 @@ const RegistrationScreen = ({ navigation }) => {
     setState(initialState);
   };
 
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  };
+
   return (
-    <TouchableWithoutFeedback onPress={handleSubmit}>
+    <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.bcgImage}
@@ -87,7 +92,7 @@ const RegistrationScreen = ({ navigation }) => {
                   onChangeText={(value) =>
                     setState((prevState) => ({ ...prevState, login: value }))
                   }
-                  onSubmitEditing={handleSubmit}
+                  onSubmitEditing={keyboardHide}
                   value={state.login}
                   keyboardType={"default"}
                   placeholder="Логін"
@@ -98,7 +103,7 @@ const RegistrationScreen = ({ navigation }) => {
                   onChangeText={(value) =>
                     setState((prevState) => ({ ...prevState, email: value }))
                   }
-                  onSubmitEditing={handleSubmit}
+                  onSubmitEditing={keyboardHide}
                   value={state.email}
                   keyboardType={"email-address"}
                   placeholder="Адреса електронної пошти"
@@ -113,7 +118,7 @@ const RegistrationScreen = ({ navigation }) => {
                         password: value,
                       }))
                     }
-                    onSubmitEditing={handleSubmit}
+                    onSubmitEditing={keyboardHide}
                     value={state.password}
                     keyboardType={"default"}
                     secureTextEntry={hidePass}

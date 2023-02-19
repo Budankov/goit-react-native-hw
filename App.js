@@ -1,13 +1,11 @@
-import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
-
-import { useFont } from "./hooks/useFont";
-import useRoute from "./router";
 import { store } from "./redux/store";
+
+import Main from "./components/Main";
+import { useFont } from "./hooks/useFont";
 
 export default function App() {
   const { appIsReady, onLayoutRootView } = useFont();
-  const routing = useRoute(false);
 
   if (!appIsReady) {
     return null;
@@ -15,9 +13,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer onLayout={onLayoutRootView}>
-        {routing}
-      </NavigationContainer>
+      <Main onLayout={onLayoutRootView} />
     </Provider>
   );
 }
