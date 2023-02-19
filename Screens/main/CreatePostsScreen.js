@@ -1,15 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, Image } from "react-native";
 import { Camera } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import * as Location from "expo-location";
 
-const CreatePostsScreen = () => {
+const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState("");
 
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      console.log(status);
+
+      if (status !== "granted") {
+        setErrorMsg("У доступі до місцезнаходження відмовлено");
+        return;
+      }
+    })();
+  }, []);
+
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
+    const location = await Location.getCurrentPositionAsync();
     setPhoto(photo.uri);
+  };
+
+  const sendPhoto = () => {
+    navigation.navigate("DefaultScreenPost", { photo });
   };
 
   return (
@@ -35,7 +53,7 @@ const CreatePostsScreen = () => {
           <TouchableOpacity
             style={styles.submitBtn}
             activeOpacity={0.8}
-            // onPress={}
+            onPress={sendPhoto}
           >
             <Text style={styles.submitBtnText}>Опублікувати</Text>
           </TouchableOpacity>

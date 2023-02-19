@@ -35,8 +35,8 @@ const useRoute = (isAuth) => {
   }
   return (
     <MainTab.Navigator
-      tabBarOptions={{ showLabel: false }}
       screenOptions={{
+        tabBarShowLabel: false,
         tabBarActiveTintColor: "#FFFFFF",
         tabBarActiveBackgroundColor: "#FF6C00",
         tabBarInactiveTintColor: "#212121",
@@ -57,6 +57,7 @@ const useRoute = (isAuth) => {
         name="PostsScreen"
         component={PostsScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
             return (
               <Ionicons name="ios-grid-outline" size={size} color={color} />
@@ -68,6 +69,7 @@ const useRoute = (isAuth) => {
         name="CreatePostsScreen"
         component={CreatePostsScreen}
         options={{
+          // headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
             return <AntDesign name="plus" size={24} color={color} />;
           },
@@ -77,6 +79,7 @@ const useRoute = (isAuth) => {
         name="ProfileScreen"
         component={ProfileScreen}
         options={{
+          // headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
             return <Feather name="user" size={24} color={color} />;
           },
