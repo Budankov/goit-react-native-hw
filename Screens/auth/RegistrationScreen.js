@@ -1,5 +1,7 @@
 import Icon from "react-native-vector-icons/FontAwesome5";
 
+import { useState, useEffect } from "react";
+
 import {
   Text,
   View,
@@ -14,7 +16,9 @@ import {
   Dimensions,
 } from "react-native";
 
-import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+
+import { auhtSignUpUser } from "../../redux/auth/authOperations";
 
 import styles from "./auth.styles";
 
@@ -32,10 +36,12 @@ const RegistrationScreen = ({ navigation }) => {
     Dimensions.get("window").width - 20 * 2
   );
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const onChange = () => {
       const width = Dimensions.get("window").width;
-      console.log(width);
+      setDimensions(width);
     };
     const dimensionsHandler = Dimensions.addEventListener("change", onChange);
     return () => {
@@ -43,14 +49,15 @@ const RegistrationScreen = ({ navigation }) => {
     };
   }, []);
 
-  const keyboardHide = () => {
+  const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+    dispatch(auhtSignUpUser(state));
     setState(initialState);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
+    <TouchableWithoutFeedback onPress={handleSubmit}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.bcgImage}
@@ -80,7 +87,7 @@ const RegistrationScreen = ({ navigation }) => {
                   onChangeText={(value) =>
                     setState((prevState) => ({ ...prevState, login: value }))
                   }
-                  onSubmitEditing={keyboardHide}
+                  onSubmitEditing={handleSubmit}
                   value={state.login}
                   keyboardType={"default"}
                   placeholder="Логін"
@@ -91,7 +98,7 @@ const RegistrationScreen = ({ navigation }) => {
                   onChangeText={(value) =>
                     setState((prevState) => ({ ...prevState, email: value }))
                   }
-                  onSubmitEditing={keyboardHide}
+                  onSubmitEditing={handleSubmit}
                   value={state.email}
                   keyboardType={"email-address"}
                   placeholder="Адреса електронної пошти"
@@ -106,7 +113,7 @@ const RegistrationScreen = ({ navigation }) => {
                         password: value,
                       }))
                     }
-                    onSubmitEditing={keyboardHide}
+                    onSubmitEditing={handleSubmit}
                     value={state.password}
                     keyboardType={"default"}
                     secureTextEntry={hidePass}
@@ -124,7 +131,7 @@ const RegistrationScreen = ({ navigation }) => {
                 <TouchableOpacity
                   style={styles.submitBtn}
                   activeOpacity={0.8}
-                  onPress={keyboardHide}
+                  onPress={handleSubmit}
                 >
                   <Text style={styles.submitBtnText}>Зареєструватись</Text>
                 </TouchableOpacity>

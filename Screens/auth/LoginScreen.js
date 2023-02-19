@@ -41,14 +41,14 @@ const LoginScreen = ({ navigation }) => {
     };
   }, []);
 
-  const keyboardHide = () => {
+  const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
     setState(initialState);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
+    <TouchableWithoutFeedback onPress={handleSubmit}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.bcgImage}
@@ -72,7 +72,7 @@ const LoginScreen = ({ navigation }) => {
                   onChangeText={(value) =>
                     setState((prevState) => ({ ...prevState, email: value }))
                   }
-                  onSubmitEditing={keyboardHide}
+                  onSubmitEditing={handleSubmit}
                   value={state.email}
                   keyboardType={"email-address"}
                   placeholder="Адреса електронної пошти"
@@ -87,7 +87,7 @@ const LoginScreen = ({ navigation }) => {
                         password: value,
                       }))
                     }
-                    onSubmitEditing={keyboardHide}
+                    onSubmitEditing={handleSubmit}
                     value={state.password}
                     keyboardType={"default"}
                     secureTextEntry={hidePass}
@@ -105,7 +105,7 @@ const LoginScreen = ({ navigation }) => {
                 <TouchableOpacity
                   style={styles.submitBtn}
                   activeOpacity={0.8}
-                  onPress={keyboardHide}
+                  onPress={handleSubmit}
                 >
                   <Text style={styles.submitBtnText}>Увійти</Text>
                 </TouchableOpacity>
