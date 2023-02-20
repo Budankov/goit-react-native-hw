@@ -17,7 +17,7 @@ import {
 
 import { useDispatch } from "react-redux";
 
-import { auhtSignInUser } from "../../redux/auth/authOperations";
+import { authSignInUser } from "../../redux/auth/authOperations";
 
 import styles from "./auth.styles";
 
@@ -50,7 +50,7 @@ const LoginScreen = ({ navigation }) => {
   const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    dispatch(auhtSignInUser(state));
+    dispatch(authSignInUser(state));
     setState(initialState);
   };
 

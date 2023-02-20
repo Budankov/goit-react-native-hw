@@ -18,7 +18,7 @@ import {
 
 import { useDispatch } from "react-redux";
 
-import { auhtSignUpUser } from "../../redux/auth/authOperations";
+import { authSignUpUser } from "../../redux/auth/authOperations";
 
 import styles from "./auth.styles";
 
@@ -52,7 +52,7 @@ const RegistrationScreen = ({ navigation }) => {
   const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    dispatch(auhtSignUpUser(state));
+    dispatch(authSignUpUser(state));
     setState(initialState);
   };
 
