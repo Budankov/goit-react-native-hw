@@ -44,21 +44,26 @@ export const authSignUpUser =
 export const authSignInUser =
   ({ email, password }) =>
   async (dispath, getState) => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log("user", user);
-      })
-      .catch((error) => {
-        console.log(error);
-        console.log(error.message);
-      });
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("userCredential", userCredential);
+      const user = userCredential.user;
+      console.log("user", user);
+    } catch (error) {
+      console.log(error);
+      console.log(error.message);
+    }
   };
 
 export const authSignOutUser = () => async (dispath, getState) => {
   try {
-    const response = await signOut(auth);
-    dispath(authSlice.actions.authSignOut());
+    await signOut(auth);
+    dispath(authSlice.authSignOut());
+    console.log("User signed out successfully");
   } catch (error) {
     console.log(error);
     console.log(error.message);

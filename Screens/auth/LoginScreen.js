@@ -39,7 +39,6 @@ const LoginScreen = ({ navigation }) => {
   useEffect(() => {
     const onChange = () => {
       const width = Dimensions.get("window").width;
-      console.log(width);
     };
     const dimensionsHandler = Dimensions.addEventListener("change", onChange);
     return () => {
