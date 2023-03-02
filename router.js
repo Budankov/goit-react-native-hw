@@ -55,7 +55,7 @@ const useRoute = (isAuth) => {
       }}
     >
       <MainTab.Screen
-        name="PostsScreen"
+        name="Публікації"
         component={PostsScreen}
         options={{
           // headerShown: false,
@@ -68,7 +68,7 @@ const useRoute = (isAuth) => {
         }}
       />
       <MainTab.Screen
-        name="CreatePostsScreen"
+        name="Створити публікацію"
         component={CreatePostsScreen}
         options={{
           // headerShown: false,
@@ -79,7 +79,7 @@ const useRoute = (isAuth) => {
         }}
       />
       <MainTab.Screen
-        name="ProfileScreen"
+        name="Профіль"
         component={ProfileScreen}
         options={{
           // headerShown: false,

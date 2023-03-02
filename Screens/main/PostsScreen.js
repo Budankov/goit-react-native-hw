@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import DefaultScreenPost from "../nested/DefaultScreenPost";
 import CommentsScreen from "../nested/CommentsScreen";
 import MapScreen from "../nested/MapScreen";
+import BtnLogOut from "../../components/BtnLogOut/BtnLogOut";
 
 const NestedScreen = createStackNavigator();
 
@@ -12,6 +13,10 @@ const PostsScreen = () => {
       <NestedScreen.Screen
         name="DefaultScreenPost"
         component={DefaultScreenPost}
+        options={{
+          headerShown: false,
+          headerRight: () => <BtnLogOut />,
+        }}
       />
       <NestedScreen.Screen name="CommentsScreen" component={CommentsScreen} />
       <NestedScreen.Screen name="MapScreen" component={MapScreen} />
