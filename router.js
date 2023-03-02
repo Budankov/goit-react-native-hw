@@ -7,6 +7,7 @@ import LoginScreen from "./Screens/auth/LoginScreen";
 import PostsScreen from "./Screens/main/PostsScreen";
 import CreatePostsScreen from "./Screens/main/CreatePostsScreen";
 import ProfileScreen from "./Screens/main/ProfileScreen";
+import BtnLogOut from "./components/BtnLogOut/BtnLogOut";
 
 // icons import
 import { Ionicons } from "@expo/vector-icons";
@@ -57,12 +58,13 @@ const useRoute = (isAuth) => {
         name="PostsScreen"
         component={PostsScreen}
         options={{
-          headerShown: false,
+          // headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
             return (
               <Ionicons name="ios-grid-outline" size={size} color={color} />
             );
           },
+          headerRight: () => <BtnLogOut />,
         }}
       />
       <MainTab.Screen
@@ -73,6 +75,7 @@ const useRoute = (isAuth) => {
           tabBarIcon: ({ focused, color, size }) => {
             return <AntDesign name="plus" size={24} color={color} />;
           },
+          headerRight: () => <BtnLogOut />,
         }}
       />
       <MainTab.Screen
@@ -83,6 +86,7 @@ const useRoute = (isAuth) => {
           tabBarIcon: ({ focused, color, size }) => {
             return <Feather name="user" size={24} color={color} />;
           },
+          headerRight: () => <BtnLogOut />,
         }}
       />
     </MainTab.Navigator>

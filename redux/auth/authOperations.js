@@ -23,7 +23,7 @@ export const authSignUpUser =
       });
       const { uid, displayName, photoURL } = auth.currentUser;
       dispath(
-        authSlice.actions.updateUserProfile({
+        updateUserProfile({
           userId: uid,
           nickname: displayName,
           photoURL: photoURL,
@@ -62,7 +62,7 @@ export const authSignInUser =
 export const authSignOutUser = () => async (dispath, getState) => {
   try {
     await signOut(auth);
-    dispath(authSlice.authSignOut());
+    dispath(authSignOut());
     console.log("User signed out successfully");
   } catch (error) {
     console.log(error);

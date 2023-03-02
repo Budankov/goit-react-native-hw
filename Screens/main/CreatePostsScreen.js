@@ -4,6 +4,7 @@ import { Camera } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Location from "expo-location";
 import { db } from "../../firebase/config";
+import { getDownloadURL, uploadBytes } from "firebase/storage";
 
 const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
@@ -32,13 +33,16 @@ const CreatePostsScreen = ({ navigation }) => {
     navigation.navigate("DefaultScreenPost", { photo });
   };
 
-  const uploadPhotoToServer = async (photo) => {
+  const uploadPhotoToServer = async () => {
     const response = await fetch(photo);
     const file = await response.blob();
     const uniquePostId = Date.now().toString();
 
-    const data = await db.storage().ref(`postImage/${uniquePostId}`).put(file);
-    console.log(data);
+    const data = ref(storage, `postImage/${uniquePostId}`);
+    await uploadBytes(data, file);
+
+    const processedPhoto = await getDownloadURL(data);
+    return processedPhoto;
   };
 
   return (
