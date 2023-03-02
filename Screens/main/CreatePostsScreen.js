@@ -4,33 +4,67 @@ import { Camera } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Location from "expo-location";
 import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
+import { useSelector } from "react-redux";
+import { collection, addDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import { storage } from "../../firebase/config";
 
 const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState("");
+  const [comment, setComment] = useState("");
+  const [location, setLocation] = useState(null);
+
+  const { userId, nickname } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      console.log(status);
 
       if (status !== "granted") {
         setErrorMsg("У доступі до місцезнаходження відмовлено");
         return;
       }
+
+      const location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
     })();
   }, []);
 
   const takePhoto = async () => {
-    const photo = await camera.takePictureAsync();
-    const location = await Location.getCurrentPositionAsync();
-    setPhoto(photo.uri);
+    console.log(location);
+    console.log(comment);
+    const { uri } = await camera.takePictureAsync();
+    setPhoto(uri);
   };
 
   const sendPhoto = () => {
-    uploadPhotoToServer();
+    uploadPostToServer();
     navigation.navigate("DefaultScreenPost", { photo });
+  };
+
+  const uploadPostToServer = async () => {
+    const photo = await uploadPhotoToServer();
+
+    try {
+      const db = getFirestore();
+      const newCollectionRef = collection(db, "post");
+      await addDoc(newCollectionRef, {
+        photo,
+        comment,
+        location: location.coords,
+        userId,
+        nickname,
+      });
+      console.log(`Колекція створена успішно!`);
+    } catch (error) {
+      console.error("Помилка при створенні колекції:", error);
+    }
+
+    // const createPost = await db
+    //   .firestore()
+    //   .collection("post")
+    //   .add({ photo, comment, location: location.coords, userId, nickname });
   };
 
   const uploadPhotoToServer = async () => {
@@ -69,7 +103,11 @@ const CreatePostsScreen = ({ navigation }) => {
         </Camera>
         <View style={styles.formWrapper}>
           <Text style={styles.title}>Завантажте фото</Text>
-          <TextInput style={styles.input} placeholder="Назва..." />
+          <TextInput
+            style={styles.input}
+            placeholder="Назва..."
+            onChangeText={setComment}
+          />
           <TextInput style={styles.input} placeholder="Місцевість..." />
           <TouchableOpacity
             style={styles.submitBtn}
