@@ -3,8 +3,8 @@ import { View, Text, TextInput, StyleSheet, Image } from "react-native";
 import { Camera } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Location from "expo-location";
-import { db } from "../../firebase/config";
-import { getDownloadURL, uploadBytes } from "firebase/storage";
+import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
+import { storage } from "../../firebase/config";
 
 const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
@@ -34,15 +34,21 @@ const CreatePostsScreen = ({ navigation }) => {
   };
 
   const uploadPhotoToServer = async () => {
-    const response = await fetch(photo);
-    const file = await response.blob();
-    const uniquePostId = Date.now().toString();
+    try {
+      const response = await fetch(photo);
+      const file = await response.blob();
+      const uniquePostId = Date.now().toString();
 
-    const data = ref(storage, `postImage/${uniquePostId}`);
-    await uploadBytes(data, file);
+      const data = ref(storage, `postImage/${uniquePostId}`);
+      await uploadBytes(data, file);
 
-    const processedPhoto = await getDownloadURL(data);
-    return processedPhoto;
+      const processedPhoto = await getDownloadURL(data);
+      return processedPhoto;
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(`errorCode: ${errorCode}, errorMessage: ${errorMessage}`);
+    }
   };
 
   return (
