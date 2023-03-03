@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, Image } from "react-native";
-import { Camera } from "expo-camera";
+import { Camera, CameraType } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Location from "expo-location";
 import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
@@ -10,10 +10,11 @@ import { getFirestore } from "firebase/firestore";
 import { storage } from "../../firebase/config";
 
 const CreatePostsScreen = ({ navigation }) => {
-  const [camera, setCamera] = useState(null);
+  const [camera, setCamera] = useState(CameraType.back);
   const [photo, setPhoto] = useState("");
   const [comment, setComment] = useState("");
   const [location, setLocation] = useState(null);
+  const [cameraReady, setCameraReady] = useState(false);
 
   const { userId, nickname } = useSelector((state) => state.auth);
 
@@ -38,9 +39,19 @@ const CreatePostsScreen = ({ navigation }) => {
     setPhoto(uri);
   };
 
+  const handleCameraReady = () => {
+    setCameraReady(true);
+  };
+
+  const toggleCameraType = () => {
+    setType((current) =>
+      current === CameraType.back ? CameraType.front : CameraType.back
+    );
+  };
+
   const sendPhoto = () => {
     uploadPostToServer();
-    navigation.navigate("DefaultScreenPost", { photo });
+    navigation.navigate("DefaultScreenPost");
   };
 
   const uploadPostToServer = async () => {
@@ -60,11 +71,6 @@ const CreatePostsScreen = ({ navigation }) => {
     } catch (error) {
       console.error("Помилка при створенні колекції:", error);
     }
-
-    // const createPost = await db
-    //   .firestore()
-    //   .collection("post")
-    //   .add({ photo, comment, location: location.coords, userId, nickname });
   };
 
   const uploadPhotoToServer = async () => {
@@ -88,7 +94,11 @@ const CreatePostsScreen = ({ navigation }) => {
   return (
     <View style={styles.containerBcg}>
       <View style={styles.container}>
-        <Camera style={styles.camera} ref={setCamera}>
+        <Camera
+          style={styles.camera}
+          ref={setCamera}
+          onCameraReady={handleCameraReady}
+        >
           {photo && (
             <View style={styles.takePhotoContainer}>
               <Image
