@@ -1,19 +1,29 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { useSelector } from "react-redux";
+import { db } from "../../firebase/config";
 
 // Icons
 import { AntDesign } from "@expo/vector-icons";
 
-const CommentsScreen = () => {
+const CommentsScreen = ({ route }) => {
   const [comment, setComment] = useState("");
 
-  const createPost = () => {};
+  const { postId } = route.params;
+  const { nickname } = useSelector((state) => state.auth);
+
+  const createComment = async () => {
+    console.log("db", db); // додати console.log()
+    console.log("postId", postId); // додати console.log()
+    console.log("comment", comment); // додати console.log()
+    console.log("nickname", nickname); // додати console.log()
+    await db
+      .collection("post")
+      .doc(postId)
+      .collection("comments")
+      .add({ comment, nickname });
+    setComment(""); // очистка поля вводу після додавання коментаря
+  };
 
   return (
     <View style={styles.bcgContainer}>
@@ -21,12 +31,13 @@ const CommentsScreen = () => {
         <TextInput
           style={styles.input}
           placeholder="Коментувати..."
+          value={comment}
           onChangeText={setComment}
         />
         <TouchableOpacity
           style={styles.submitBtn}
           activeOpacity={0.8}
-          onPress={createPost}
+          onPress={createComment}
         >
           <AntDesign
             style={styles.submitBtnIcon}

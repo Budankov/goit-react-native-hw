@@ -47,7 +47,9 @@ const DefaultScreenPost = ({ route, navigation }) => {
               <View style={styles.infoContainer}>
                 <TouchableOpacity
                   title="CommentsScreen"
-                  onPress={() => navigation.navigate("CommentsScreen")}
+                  onPress={() =>
+                    navigation.navigate("CommentsScreen", { postID: item.id })
+                  }
                 >
                   <EvilIcons name="comment" size={24} color="black" />
                 </TouchableOpacity>
