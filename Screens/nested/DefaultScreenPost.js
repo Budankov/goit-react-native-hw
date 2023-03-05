@@ -4,14 +4,14 @@ import { onSnapshot, collection } from "firebase/firestore";
 import { db } from "../../firebase/config";
 
 const DefaultScreenPost = ({ route, navigation }) => {
-  const [post, setPost] = useState([]);
+  const [posts, setPosts] = useState([]);
 
   const getAllPost = async () => {
     try {
       onSnapshot(collection(db, "posts"), (doc) => {
         const posts = doc.docs.map((el) => ({ ...el.data() }));
-        console.log(post);
-        setPost(posts);
+        console.log(posts);
+        setPosts(posts);
       });
     } catch (error) {
       console.log(error);
@@ -25,7 +25,7 @@ const DefaultScreenPost = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={post}
+        data={posts}
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => (
           <View style={styles.imageContainer}>

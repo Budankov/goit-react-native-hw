@@ -61,7 +61,7 @@ const CreatePostsScreen = ({ navigation }) => {
 
     try {
       const db = getFirestore();
-      const newCollectionRef = collection(db, "post");
+      const newCollectionRef = collection(db, "posts");
       await addDoc(newCollectionRef, {
         photo,
         comment,
