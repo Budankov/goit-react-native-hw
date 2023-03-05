@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, FlatList, Image, Button } from "react-native";
+import { onSnapshot, collection } from "firebase/firestore";
 import { db } from "../../firebase/config";
 
 const DefaultScreenPost = ({ route, navigation }) => {
@@ -7,14 +8,9 @@ const DefaultScreenPost = ({ route, navigation }) => {
 
   const getAllPost = async () => {
     try {
-      // const snapshot = await db.collection("post").get();
-      // const postList = snapshot.docs.map((doc) => ({
-      //   ...doc.data(),
-      //   id: doc.id,
-      // }));
-      // setPost(postList);
       onSnapshot(collection(db, "posts"), (doc) => {
         const posts = doc.docs.map((el) => ({ ...el.data() }));
+        console.log(post);
         setPost(posts);
       });
     } catch (error) {
