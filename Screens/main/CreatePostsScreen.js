@@ -20,6 +20,8 @@ const CreatePostsScreen = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
+      await Camera.requestCameraPermissionsAsync();
+
       let { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status !== "granted") {
@@ -63,7 +65,7 @@ const CreatePostsScreen = ({ navigation }) => {
       await addDoc(newCollectionRef, {
         photo,
         comment,
-        location: location.coords,
+        location,
         userId,
         nickname,
       });

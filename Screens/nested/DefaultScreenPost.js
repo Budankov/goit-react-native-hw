@@ -7,12 +7,16 @@ const DefaultScreenPost = ({ route, navigation }) => {
 
   const getAllPost = async () => {
     try {
-      const snapshot = await db.collection("post").get();
-      const postList = snapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setPost(postList);
+      // const snapshot = await db.collection("post").get();
+      // const postList = snapshot.docs.map((doc) => ({
+      //   ...doc.data(),
+      //   id: doc.id,
+      // }));
+      // setPost(postList);
+      onSnapshot(collection(db, "posts"), (doc) => {
+        const posts = doc.docs.map((el) => ({ ...el.data() }));
+        setPost(posts);
+      });
     } catch (error) {
       console.log(error);
     }
