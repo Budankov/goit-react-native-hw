@@ -29,7 +29,7 @@ const CreatePostsScreen = ({ navigation }) => {
         return;
       }
 
-      const location = await Location.getCurrentPositionAsync({});
+      const location = await Location.getCurrentPositionAsync();
       setLocation(location);
     })();
   }, []);
@@ -65,7 +65,7 @@ const CreatePostsScreen = ({ navigation }) => {
       await addDoc(newCollectionRef, {
         photo,
         comment,
-        location,
+        location: location.coords,
         userId,
         nickname,
       });
