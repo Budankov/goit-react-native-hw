@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { useSelector } from "react-redux";
 import { db } from "../../firebase/config";
+import { collection, addDoc } from "firebase/firestore";
 
 // Icons
 import { AntDesign } from "@expo/vector-icons";
@@ -9,20 +10,14 @@ import { AntDesign } from "@expo/vector-icons";
 const CommentsScreen = ({ route }) => {
   const [comment, setComment] = useState("");
 
-  const { postId } = route.params;
+  const { postID } = route.params;
   const { nickname } = useSelector((state) => state.auth);
 
   const createComment = async () => {
-    console.log("db", db); // додати console.log()
-    console.log("postId", postId); // додати console.log()
-    console.log("comment", comment); // додати console.log()
-    console.log("nickname", nickname); // додати console.log()
-    await db
-      .collection("post")
-      .doc(postId)
-      .collection("comments")
-      .add({ comment, nickname });
-    setComment(""); // очистка поля вводу після додавання коментаря
+    const commentsRef = collection(db, `posts/${postID}/comments`);
+    await addDoc(commentsRef, { comment, nickname });
+
+    setComment("");
   };
 
   return (

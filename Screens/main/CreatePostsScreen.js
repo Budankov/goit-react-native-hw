@@ -66,9 +66,11 @@ const CreatePostsScreen = ({ navigation }) => {
         photo,
         comment,
         location: location.coords,
+        // location,
         userId,
         nickname,
       });
+      console.log(location);
       console.log(`Колекція створена успішно!`);
     } catch (error) {
       console.error("Помилка при створенні колекції:", error);

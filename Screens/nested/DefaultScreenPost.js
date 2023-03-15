@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -15,11 +16,15 @@ import { EvilIcons } from "@expo/vector-icons";
 
 const DefaultScreenPost = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
+  const { avatar, nickName, email, userId } = useSelector(
+    (state) => state.auth
+  );
+  // console.log(avatar, nickName, email, userId);
 
   const getAllPost = async () => {
     try {
-      onSnapshot(collection(db, "posts"), (doc) => {
-        const posts = doc.docs.map((el) => ({ ...el.data() }));
+      onSnapshot(collection(db, "posts"), (data) => {
+        const posts = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
         console.log(posts);
         setPosts(posts);
       });
