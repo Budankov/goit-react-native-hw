@@ -18,7 +18,7 @@ const PostsScreen = () => {
           headerRight: () => <BtnLogOut />,
         }}
       />
-      <NestedScreen.Screen name="CommentsScreen" component={CommentsScreen} />
+      <NestedScreen.Screen name="Коментарі" component={CommentsScreen} />
       <NestedScreen.Screen name="MapScreen" component={MapScreen} />
     </NestedScreen.Navigator>
   );
