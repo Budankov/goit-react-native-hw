@@ -10,13 +10,9 @@ import {
 } from "react-native";
 import { useSelector } from "react-redux";
 import { db } from "../../firebase/config";
-import {
-  collection,
-  addDoc,
-  onSnapshot,
-  orderBy,
-  query,
-} from "firebase/firestore";
+import { collection, addDoc, onSnapshot, query } from "firebase/firestore";
+
+import formatDate from "../../utils/formatDate";
 
 // Icons
 import { AntDesign } from "@expo/vector-icons";
@@ -33,17 +29,16 @@ const CommentsScreen = ({ route }) => {
   }, []);
 
   const createComment = async () => {
+    const date = formatDate(new Date());
+
     const commentsRef = collection(db, `posts/${postID}/comments`);
-    await addDoc(commentsRef, { comment, nickname });
+    await addDoc(commentsRef, { comment, nickname, date });
 
     setComment("");
   };
 
   const getAllComments = async () => {
-    const commentsQuery = query(
-      collection(db, `posts/${postID}/comments`)
-      // orderBy("date")
-    );
+    const commentsQuery = query(collection(db, `posts/${postID}/comments`));
     onSnapshot(commentsQuery, (data) =>
       setAllComments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
     );
@@ -58,8 +53,8 @@ const CommentsScreen = ({ route }) => {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View>
-                <Text>{item.nickname}</Text>
                 <Text>{item.comment}</Text>
+                <Text>{item.date}</Text>
               </View>
             )}
           />
