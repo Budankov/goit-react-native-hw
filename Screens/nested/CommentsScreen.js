@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
+  Image,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -21,8 +22,9 @@ const CommentsScreen = ({ route }) => {
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
 
-  const { postID } = route.params;
+  const { postID, photo } = route.params;
   const { nickname } = useSelector((state) => state.auth);
+  console.log(route.params);
 
   useEffect(() => {
     getAllComments();
@@ -47,14 +49,19 @@ const CommentsScreen = ({ route }) => {
   return (
     <View style={styles.bcgContainer}>
       <View style={styles.container}>
+        <View style={styles.photoWrapper}>
+          <Image style={styles.photo} source={{ uri: photo }} />
+        </View>
         <SafeAreaView>
           <FlatList
             data={allComments}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View>
-                <Text>{item.comment}</Text>
-                <Text>{item.date}</Text>
+                <View style={styles.commentText}>
+                  <Text>{item.comment}</Text>
+                  <Text>{item.date}</Text>
+                </View>
               </View>
             )}
           />
@@ -87,7 +94,6 @@ const CommentsScreen = ({ route }) => {
 const styles = StyleSheet.create({
   bcgContainer: {
     flex: 1,
-    justifyContent: "flex-end",
     backgroundColor: "#FFF",
   },
   container: {
@@ -112,6 +118,20 @@ const styles = StyleSheet.create({
   submitBtnIcon: {
     padding: 8,
     color: "#FFF",
+  },
+
+  photo: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 8,
+  },
+  photoWrapper: {
+    top: 0,
+    height: 240,
+    marginHorizontal: 16,
+    marginTop: 32,
+    marginBottom: 32,
+    borderColor: "#E8E8E8",
   },
 });
 

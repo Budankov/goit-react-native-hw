@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -16,10 +15,6 @@ import { EvilIcons } from "@expo/vector-icons";
 
 const DefaultScreenPost = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
-  const { avatar, nickName, email, userId } = useSelector(
-    (state) => state.auth
-  );
-  // console.log(avatar, nickName, email, userId);
 
   const getAllPost = async () => {
     try {
@@ -53,7 +48,10 @@ const DefaultScreenPost = ({ route, navigation }) => {
                 <TouchableOpacity
                   title="CommentsScreen"
                   onPress={() =>
-                    navigation.navigate("Коментарі", { postID: item.id })
+                    navigation.navigate("Коментарі", {
+                      postID: item.id,
+                      photo: item.photo,
+                    })
                   }
                 >
                   <EvilIcons name="comment" size={24} color="black" />
