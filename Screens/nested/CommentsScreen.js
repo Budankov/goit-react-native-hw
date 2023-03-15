@@ -1,17 +1,29 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  SafeAreaView,
+} from "react-native";
 import { useSelector } from "react-redux";
 import { db } from "../../firebase/config";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, onSnapshot, orderBy } from "firebase/firestore";
 
 // Icons
 import { AntDesign } from "@expo/vector-icons";
 
 const CommentsScreen = ({ route }) => {
   const [comment, setComment] = useState("");
+  const [allComments, setAllComments] = useState([]);
 
   const { postID } = route.params;
   const { nickname } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    getAllComments;
+  }, []);
 
   const createComment = async () => {
     const commentsRef = collection(db, `posts/${postID}/comments`);
@@ -20,8 +32,31 @@ const CommentsScreen = ({ route }) => {
     setComment("");
   };
 
+  const getAllComments = async () => {
+    const commentsQuery = query(
+      collection(db, `posts/${postID}/comments`),
+      orderBy("date")
+    );
+    onSnapshot(commentsQuery, (data) =>
+      setAllComments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+    );
+  };
+
   return (
     <View style={styles.bcgContainer}>
+      <SafeAreaView>
+        <FlatList
+          style={styles.messageList}
+          data={allComments}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View>
+              <Text>{item.nickname}</Text>
+              <Text>{item.comment}</Text>
+            </View>
+          )}
+        />
+      </SafeAreaView>
       <View style={styles.container}>
         <TextInput
           style={styles.input}
