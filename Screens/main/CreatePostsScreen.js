@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { Camera, CameraType } from "expo-camera";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Location from "expo-location";
 import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
 import { useSelector } from "react-redux";
 import { collection, addDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { storage } from "../../firebase/config";
+
+// Icons
+import { EvilIcons } from "@expo/vector-icons";
 
 const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(CameraType.back);
@@ -30,6 +39,7 @@ const CreatePostsScreen = ({ navigation }) => {
       }
 
       const location = await Location.getCurrentPositionAsync();
+      console.log(location);
       setLocation(location);
     })();
   }, []);
@@ -65,8 +75,8 @@ const CreatePostsScreen = ({ navigation }) => {
       await addDoc(newCollectionRef, {
         photo,
         comment,
-        location: location.coords,
-        // location,
+        // location: location.coords,
+        location,
         userId,
         nickname,
       });
@@ -112,7 +122,14 @@ const CreatePostsScreen = ({ navigation }) => {
             </View>
           )}
           <TouchableOpacity style={styles.snapContainer} onPress={takePhoto}>
-            <Text style={styles.snap}>SNAP</Text>
+            <Text style={styles.snap}>
+              <EvilIcons
+                style={styles.snapIcon}
+                name="camera"
+                size={28}
+                color="black"
+              />
+            </Text>
           </TouchableOpacity>
         </Camera>
         <View style={styles.formWrapper}>
@@ -122,7 +139,20 @@ const CreatePostsScreen = ({ navigation }) => {
             placeholder="Назва..."
             onChangeText={setComment}
           />
-          <TextInput style={styles.input} placeholder="Місцевість..." />
+          <View style={styles.locationWrapper}>
+            <TextInput
+              style={styles.locationInput}
+              placeholder="Місцевість..."
+              onChangeText={(value) => setLocation(value)}
+              value={location}
+            />
+            <EvilIcons
+              style={styles.locationIcon}
+              name="location"
+              size={28}
+              color="black"
+            />
+          </View>
           <TouchableOpacity
             style={styles.submitBtn}
             activeOpacity={0.8}
@@ -149,23 +179,23 @@ const styles = StyleSheet.create({
     height: "40%",
     borderWidth: 1,
     borderRadius: 8,
-    justifyContent: "flex-end",
+    justifyContent: "center",
     alignItems: "center",
     marginTop: 32,
   },
   snap: {
     color: "#FFF",
   },
+  snapIcon: {
+    color: "white",
+  },
   snapContainer: {
-    borderWidth: 1,
     borderRadius: 50,
-    borderColor: "#FF0000",
+    backgroundColor: "#e7e1cd4a",
     width: 70,
     height: 70,
-    marginTop: 200,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
   },
   takePhotoContainer: {
     position: "absolute",
@@ -204,6 +234,28 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 16,
     position: "relative",
+  },
+  locationWrapper: { position: "relative" },
+  locationInput: {
+    paddingLeft: 35,
+    color: "#212121",
+    height: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: "#BDBDBD",
+    backgroundColor: "#FFFFFF",
+    placeholderTextColor: "#BDBDBD",
+    paddingTop: 15,
+    paddingBottom: 15,
+    fontFamily: "Roboto-Regular",
+    fontWeight: "400",
+    fontSize: 16,
+    marginBottom: 16,
+  },
+
+  locationIcon: {
+    position: "absolute",
+    top: 13,
+    color: "#BDBDBD",
   },
   submitBtn: {
     backgroundColor: "#FF6C00",
