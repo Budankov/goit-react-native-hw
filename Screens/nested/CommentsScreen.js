@@ -52,21 +52,21 @@ const CommentsScreen = ({ route }) => {
         <View style={styles.photoWrapper}>
           <Image style={styles.photo} source={{ uri: photo }} />
         </View>
-        <SafeAreaView>
+        <SafeAreaView style={styles.SafeAreaView}>
           <FlatList
             data={allComments}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View>
-                <View style={styles.commentText}>
-                  <Text>{item.comment}</Text>
-                  <Text>{item.date}</Text>
+                <View style={styles.commentWrapper}>
+                  <Text style={styles.commentText}>{item.comment}</Text>
+                  <Text style={styles.commentDate}>{item.date}</Text>
                 </View>
               </View>
             )}
           />
         </SafeAreaView>
-        <View>
+        <View style={styles.submitForm}>
           <TextInput
             style={styles.input}
             placeholder="Коментувати..."
@@ -97,16 +97,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
   },
   container: {
+    flex: 1,
     marginHorizontal: 16,
     marginBottom: 16,
   },
+  SafeAreaView: { flex: 1 },
   input: {
     height: 50,
     borderWidth: 1,
     borderColor: "#E8E8E8",
+    backgroundColor: "#F6F6F6",
     borderRadius: 50,
     padding: 16,
-    position: "relative",
+  },
+  submitForm: {
+    marginTop: 32,
   },
   submitBtn: {
     position: "absolute",
@@ -128,10 +133,29 @@ const styles = StyleSheet.create({
   photoWrapper: {
     top: 0,
     height: 240,
-    marginHorizontal: 16,
     marginTop: 32,
     marginBottom: 32,
     borderColor: "#E8E8E8",
+  },
+  commentWrapper: {
+    backgroundColor: "rgba(0, 0, 0, 0.03)",
+    borderRadius: 6,
+    padding: 16,
+    marginBottom: 24,
+    flex: 1,
+  },
+
+  commentText: {
+    color: "#212121",
+    fontSize: 13,
+    lineHeight: 18,
+  },
+
+  commentDate: {
+    color: "#bdbdbd",
+    fontSize: 10,
+    lineHeight: 12,
+    textAlign: "right",
   },
 });
 
