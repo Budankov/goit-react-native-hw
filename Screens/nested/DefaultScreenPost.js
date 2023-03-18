@@ -66,7 +66,7 @@ const DefaultScreenPost = ({ route, navigation }) => {
                 >
                   <EvilIcons name="location" size={24} color="black" />
                 </TouchableOpacity>
-                {/* <Text>{item.location.latitude}</Text> */}
+                <Text>{item.addressLocation}</Text>
               </View>
             </View>
           )}

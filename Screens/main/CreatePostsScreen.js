@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Geolocation,
 } from "react-native";
 import { Camera, CameraType } from "expo-camera";
 import * as Location from "expo-location";
@@ -23,6 +22,8 @@ const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(CameraType.back);
   const [photo, setPhoto] = useState("");
   const [comment, setComment] = useState("");
+  const [coordinates, setCoordinates] = useState(null);
+  const [addressLocation, setAddressLocation] = useState(null);
   const [location, setLocation] = useState(null);
   const [locationPlaceholder, setLocationPlaceholder] =
     useState("Місцевість...");
@@ -33,25 +34,21 @@ const CreatePostsScreen = ({ navigation }) => {
   useEffect(() => {
     (async () => {
       await Camera.requestCameraPermissionsAsync();
-
-      let coords = await getLocation();
-      console.log(coords.latitude, coords.longitude);
-
-      setLocation(coords);
     })();
   }, []);
 
-  // async function getLocation() {
-  //   let { status } = await Location.requestForegroundPermissionsAsync();
-  //   if (status !== "granted") {
-  //     console.log("Permission to access location was denied");
-  //     return;
-  //   }
-
-  //   let { coords } = await Location.getCurrentPositionAsync({});
-  //   setLocation({ latitude: coords.latitude, longitude: coords.longitude });
-  //   console.log(location);
-  // }
+  async function getAddressFromCoords(latitude, longitude) {
+    try {
+      const response = await fetch(
+        `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=ecfaa1213e9745dd810778529e8fea9d&language=uk&no_annotations=1`
+      );
+      const data = await response.json();
+      const address = data.results[0].formatted;
+      return address;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async function getLocation() {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -61,16 +58,14 @@ const CreatePostsScreen = ({ navigation }) => {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    return location.coords;
-  }
+    const { latitude, longitude } = location.coords;
+    console.log(latitude, longitude);
 
-  useEffect(() => {
-    if (location) {
-      setLocationPlaceholder(
-        `(${location.latitude.toFixed(6)}, ${location.longitude.toFixed(6)})`
-      );
-    }
-  }, [location]);
+    const address = await getAddressFromCoords(latitude, longitude);
+    setLocation({ latitude, longitude });
+    setAddressLocation(address);
+    setLocationPlaceholder(address);
+  }
 
   const takePhoto = async () => {
     console.log(location);
@@ -103,6 +98,7 @@ const CreatePostsScreen = ({ navigation }) => {
       await addDoc(newCollectionRef, {
         photo,
         comment,
+        addressLocation,
         location,
         userId,
         nickname,
@@ -170,8 +166,6 @@ const CreatePostsScreen = ({ navigation }) => {
             <TextInput
               style={styles.locationInput}
               placeholder={locationPlaceholder}
-              // onChangeText={(value) => setLocation(value)}
-              // value={location}
             />
             <EvilIcons
               style={styles.locationIcon}
@@ -181,6 +175,7 @@ const CreatePostsScreen = ({ navigation }) => {
               onPress={getLocation}
             />
           </View>
+          <View style={{ flex: 1 }}></View>
           <TouchableOpacity
             style={styles.submitBtn}
             activeOpacity={0.8}
@@ -263,7 +258,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     position: "relative",
   },
-  locationWrapper: { position: "relative" },
+  locationWrapper: {
+    position: "relative",
+  },
   locationInput: {
     paddingLeft: 35,
     color: "#212121",
@@ -299,6 +296,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingTop: 16,
     paddingBottom: 16,
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
 });
 
