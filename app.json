@@ -18,7 +18,10 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSCameraUsageDescription": "Для доступу до камери потрібен дозвіл користувача"
+        "NSCameraUsageDescription": "Для доступу до камери потрібен дозвіл користувача",
+        "NSLocationWhenInUseUsageDescription": "Цій програмі потрібен доступ до вашого місцезнаходження, щоб показати ваше поточне місцезнаходження на карті."
+
+        
       }
     },
     "android": {

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Geolocation,
 } from "react-native";
 import { Camera, CameraType } from "expo-camera";
 import * as Location from "expo-location";
@@ -31,18 +32,23 @@ const CreatePostsScreen = ({ navigation }) => {
     (async () => {
       await Camera.requestCameraPermissionsAsync();
 
-      let { status } = await Location.requestForegroundPermissionsAsync();
+      // console.log(coords.latitude, coords.longitude);
 
-      if (status !== "granted") {
-        setErrorMsg("У доступі до місцезнаходження відмовлено");
-        return;
-      }
-
-      const location = await Location.getCurrentPositionAsync();
-      console.log(location);
-      setLocation(location);
+      // setLocation(coords);
     })();
   }, []);
+
+  async function getLocation() {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      console.log("Permission to access location was denied");
+      return;
+    }
+
+    let { coords } = await Location.getCurrentPositionAsync({});
+    setLocation({ latitude: coords.latitude, longitude: coords.longitude });
+    console.log(location);
+  }
 
   const takePhoto = async () => {
     console.log(location);
@@ -75,7 +81,6 @@ const CreatePostsScreen = ({ navigation }) => {
       await addDoc(newCollectionRef, {
         photo,
         comment,
-        // location: location.coords,
         location,
         userId,
         nickname,
@@ -143,14 +148,15 @@ const CreatePostsScreen = ({ navigation }) => {
             <TextInput
               style={styles.locationInput}
               placeholder="Місцевість..."
-              onChangeText={(value) => setLocation(value)}
-              value={location}
+              // onChangeText={(value) => setLocation(value)}
+              // value={location}
             />
             <EvilIcons
               style={styles.locationIcon}
               name="location"
               size={28}
               color="black"
+              onPress={getLocation}
             />
           </View>
           <TouchableOpacity
