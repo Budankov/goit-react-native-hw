@@ -24,6 +24,8 @@ const CreatePostsScreen = ({ navigation }) => {
   const [photo, setPhoto] = useState("");
   const [comment, setComment] = useState("");
   const [location, setLocation] = useState(null);
+  const [locationPlaceholder, setLocationPlaceholder] =
+    useState("Місцевість...");
   const [cameraReady, setCameraReady] = useState(false);
 
   const { userId, nickname } = useSelector((state) => state.auth);
@@ -32,11 +34,24 @@ const CreatePostsScreen = ({ navigation }) => {
     (async () => {
       await Camera.requestCameraPermissionsAsync();
 
-      // console.log(coords.latitude, coords.longitude);
+      let coords = await getLocation();
+      console.log(coords.latitude, coords.longitude);
 
-      // setLocation(coords);
+      setLocation(coords);
     })();
   }, []);
+
+  // async function getLocation() {
+  //   let { status } = await Location.requestForegroundPermissionsAsync();
+  //   if (status !== "granted") {
+  //     console.log("Permission to access location was denied");
+  //     return;
+  //   }
+
+  //   let { coords } = await Location.getCurrentPositionAsync({});
+  //   setLocation({ latitude: coords.latitude, longitude: coords.longitude });
+  //   console.log(location);
+  // }
 
   async function getLocation() {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -45,10 +60,17 @@ const CreatePostsScreen = ({ navigation }) => {
       return;
     }
 
-    let { coords } = await Location.getCurrentPositionAsync({});
-    setLocation({ latitude: coords.latitude, longitude: coords.longitude });
-    console.log(location);
+    let location = await Location.getCurrentPositionAsync({});
+    return location.coords;
   }
+
+  useEffect(() => {
+    if (location) {
+      setLocationPlaceholder(
+        `(${location.latitude.toFixed(6)}, ${location.longitude.toFixed(6)})`
+      );
+    }
+  }, [location]);
 
   const takePhoto = async () => {
     console.log(location);
@@ -147,7 +169,7 @@ const CreatePostsScreen = ({ navigation }) => {
           <View style={styles.locationWrapper}>
             <TextInput
               style={styles.locationInput}
-              placeholder="Місцевість..."
+              placeholder={locationPlaceholder}
               // onChangeText={(value) => setLocation(value)}
               // value={location}
             />
