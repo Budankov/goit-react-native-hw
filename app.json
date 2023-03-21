@@ -2,6 +2,7 @@
   "expo": {
     "name": "goit-react-native-hw",
     "slug": "goit-react-native-hw",
+    "description": "First HW App",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
